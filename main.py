@@ -251,21 +251,24 @@ async def main():
     # --- INTRO SCREEN ---
     async def show_intro_screen():
         intro_font = pygame.font.SysFont("Segoe UI Emoji", 30, bold=True)
-        small_font = pygame.font.SysFont("Segoe UI Emoji", 22)
-        tiny_font = pygame.font.SysFont("Segoe UI Emoji", 20)
+        small_font = pygame.font.SysFont("Segoe UI Emoji", 20)
+        tiny_font = pygame.font.SysFont("Segoe UI Emoji", 18)
         title_text = intro_font.render(" 2-Player Earthball Game ", True, (250, 220, 40))
         instructions = [
-            "- Movement Controls:",
-            "• Left:  A / \u2190,",
-            "• Right:  D / \u2192,",
-            "• Jump:  W / \u2191,",
-            "• Slide:  S / \u2193,",
-            "",
             "- Game Rules:",
             "• You’re floating on a space court, battling with a volleyball that looks like planet Earth!",
             "• Hit the Earthball over the cosmic net.",
             "• If it falls on the opponent’s side, you score 1 point.",
-            "• First player to reach 10 points wins and becomes the Galaxy Spike Champion!"
+            "• First player to reach 10 points wins and becomes the Galaxy Spike Champion!",
+            "",
+            "- Movement Controls:",
+            # We'll use a tuple to indicate table rows for rendering
+            ("", "Player 1", "Player 2"),
+            ("Move Left", "A", "\u2190"),
+            ("Move Right", "D", "\u2192"),
+            ("Jump", "W", "\u2191"),
+            ("Slide", "S", "\u2193"),
+            ("Smash", "Left Shift", "Enter"),
         ]
         button_font = pygame.font.SysFont("Segoe UI Emoji", 24)
         button_text = button_font.render("PLAY", True, (50, 50, 50))
@@ -314,16 +317,25 @@ async def main():
             y_offset = 90
             for idx, line in enumerate(instructions):
                 # Make section headers larger and bold
-                if line.strip() in ["- Movement Controls:", "- Game Rules:"]:
-                    header_font = pygame.font.SysFont("Segoe UI Emoji", 24, bold=True)
+                if isinstance(line, str) and line.strip() in ["- Movement Controls:", "- Game Rules:"]:
+                    header_font = pygame.font.SysFont("Segoe UI Emoji", 20, bold=True)
                     text = header_font.render(line.replace("-", "").strip(), True, (230, 230, 255))
                     screen.blit(text, (left_margin, y_offset))
-                    y_offset += 32
-                else:
+                    y_offset += 24
+                elif isinstance(line, str):
                     font_to_use = small_font if idx == 0 else tiny_font
                     text = font_to_use.render(line, True, (230, 230, 255))
                     screen.blit(text, (left_margin, y_offset))
-                    y_offset += 28 if idx == 0 else 24
+                    y_offset += 24 if idx == 0 else 22
+                elif isinstance(line, tuple):
+                    # Render as table row (no grid lines)
+                    col_width = 120
+                    for col_idx, col_text in enumerate(line):
+                        align_x = left_margin + col_idx * col_width
+                        table_font = small_font if idx == 6 else tiny_font
+                        text = table_font.render(str(col_text), True, (230, 230, 255))
+                        screen.blit(text, (align_x, y_offset))
+                    y_offset += 22
 
             # Draw play button
             pygame.draw.rect(screen, (250, 240, 200), button_bg_rect, border_radius=12)
@@ -350,16 +362,16 @@ async def main():
             {'char_idx': 2, 'name': '', 'active': False}
         ]
         input_boxes = [
-            pygame.Rect(WIDTH//4 - 80, HEIGHT//2 + 60, 160, 36),
-            pygame.Rect(WIDTH*3//4 - 80, HEIGHT//2 + 60, 160, 36)
+            pygame.Rect(WIDTH//4 - 100, HEIGHT//2 + 60, 200, 36),
+            pygame.Rect(WIDTH*3//4 - 100, HEIGHT//2 + 60, 200, 36)
         ]
         confirm_font = pygame.font.SysFont("Segoe UI Emoji", 24)
         confirm_text = confirm_font.render("CONFIRM", True, (50, 50, 50))
         confirm_rect = confirm_text.get_rect(center=(WIDTH//2, HEIGHT//2 + 180))
         confirm_bg_rect = confirm_rect.inflate(40, 30)
         arrow_font = pygame.font.SysFont("Segoe UI Emoji", 48)
-        left_arrow = arrow_font.render("\u2190", True, (230, 230, 255))
-        right_arrow = arrow_font.render("\u2192", True, (230, 230, 255))
+        left_arrow = arrow_font.render("\u21E6", True, (230, 230, 255))
+        right_arrow = arrow_font.render("\u21E8", True, (230, 230, 255))
         left_arrow_rects = [
             left_arrow.get_rect(center=(WIDTH//4 - 90, HEIGHT//2)),
             left_arrow.get_rect(center=(WIDTH*3//4 - 90, HEIGHT//2))
@@ -458,7 +470,7 @@ async def main():
             for i in range(2):
                 color = (250, 220, 40) if selections[i]['active'] else (200, 200, 200)
                 pygame.draw.rect(screen, color, input_boxes[i], 2, border_radius=8)
-                name_surface = name_font.render(selections[i]['name'] or "Enter name...", True, (230, 230, 255) if selections[i]['name'] else (150, 150, 150))
+                name_surface = name_font.render(selections[i]['name'] or "Enter your name...", True, (230, 230, 255) if selections[i]['name'] else (150, 150, 150))
                 screen.blit(name_surface, (input_boxes[i].x + 8, input_boxes[i].y + 6))
 
             # Confirm button
