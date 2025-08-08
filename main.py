@@ -300,8 +300,8 @@ async def main():
             rect = pygame.draw.rect(
                 screen,
                 (0, 0, 0),
-                (50, 80, screen.get_width() - 100, screen.get_height() - 200),
-                border_radius=40
+                (50, 75, screen.get_width() - 100, screen.get_height() - 180),
+                border_radius=20
             )
             pygame.draw.rect(screen, (255, 255, 255), rect, 2, border_radius=40)
 
@@ -369,9 +369,9 @@ async def main():
         confirm_text = confirm_font.render("CONFIRM", True, (50, 50, 50))
         confirm_rect = confirm_text.get_rect(center=(WIDTH//2, HEIGHT//2 + 180))
         confirm_bg_rect = confirm_rect.inflate(40, 30)
-        arrow_font = pygame.font.SysFont("Segoe UI Emoji", 48)
-        left_arrow = arrow_font.render("\u21E6", True, (230, 230, 255))
-        right_arrow = arrow_font.render("\u21E8", True, (230, 230, 255))
+        arrow_font = pygame.font.SysFont("Segoe UI Emoji", 36)
+        left_arrow = arrow_font.render("\u2190", True, (230, 230, 255))
+        right_arrow = arrow_font.render("\u2192", True, (230, 230, 255))
         left_arrow_rects = [
             left_arrow.get_rect(center=(WIDTH//4 - 90, HEIGHT//2)),
             left_arrow.get_rect(center=(WIDTH*3//4 - 90, HEIGHT//2))
@@ -432,14 +432,14 @@ async def main():
             panel_rect = pygame.draw.rect(
                 screen,
                 (0, 0, 0),
-                (50, 80, screen.get_width() - 100, screen.get_height() - 200),
-                border_radius=40
+                (50, 75, screen.get_width() - 100, screen.get_height() - 180),
+                border_radius=20
             )
             pygame.draw.rect(screen, (255, 255, 255), panel_rect, 2, border_radius=40)
 
             # Title
-            intro_font = pygame.font.SysFont("Segoe UI Emoji", 30, bold=True)
-            title_text = intro_font.render(" 2-Player Earthball Game ", True, (250, 220, 40))
+            title_font = pygame.font.SysFont("Segoe UI Emoji", 30, bold=True)
+            title_text = title_font.render(" 2-Player Earthball Game ", True, (250, 220, 40))
             title_img = pygame.image.load("assets/img/alien.png").convert_alpha()
             title_img = pygame.transform.scale(title_img, (60, 60))
             title_y = 30 + title_text.get_height() // 2 - title_img.get_height() // 2
@@ -448,13 +448,13 @@ async def main():
             screen.blit(title_text, (screen.get_width() // 2 - title_text.get_width() // 2, 40))
             
             text = label_font.render("Select Your Character and Input Your Name", True, (100, 100, 100))
-            screen.blit(text, (WIDTH//2 - text.get_width()//2, 100))
+            screen.blit(text, (WIDTH//2 - text.get_width()//2, 120))
 
             # Player 1 and 2 labels
             p1_label = label_font.render("Player 1", True, (230, 230, 255))
             p2_label = label_font.render("Player 2", True, (230, 230, 255))
-            screen.blit(p1_label, (WIDTH//4 - p1_label.get_width()//2, HEIGHT//2 - 110))
-            screen.blit(p2_label, (WIDTH*3//4 - p2_label.get_width()//2, HEIGHT//2 - 110))
+            screen.blit(p1_label, (WIDTH//4 - p1_label.get_width()//2, HEIGHT//2 - 80))
+            screen.blit(p2_label, (WIDTH*3//4 - p2_label.get_width()//2, HEIGHT//2 - 80))
 
             # Character previews and arrows
             for i in range(2):
